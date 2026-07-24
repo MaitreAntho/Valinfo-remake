@@ -25,15 +25,12 @@ Pour savoir ce que c'est, visite la page du projet original : [Valinfo](https://
 
 ## ![](https://img.icons8.com/?size=60&id=DWiebo2M1Bbt&format=svg) Utilisation :
 
-1) Installe [Python 3.10 ou plus récent](https://www.python.org/downloads/), en cochant l'ajout au PATH.
-2) Télécharge le code source :
-   ```
-   https://github.com/MaitreAntho/Valinfo-remake/archive/refs/heads/main.zip
-   ```
-   ou clone-le avec git :
+1) Installe [Python 3.10 ou plus récent](https://www.python.org/downloads/) et [Git](https://git-scm.com/downloads), en cochant l'ajout au PATH pour les deux.
+2) Clone le code source :
    ```
    git clone https://github.com/MaitreAntho/Valinfo-remake.git
    ```
+   > Cloner avec git (plutôt que télécharger un zip) est nécessaire pour que `update.bat` fonctionne ensuite.
 3) Double-clique sur **`launch.bat`** pour installer les dépendances et lancer Valinfo.
 
 C'est tout — `launch.bat` installe automatiquement ce dont il a besoin au premier lancement.
