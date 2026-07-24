@@ -9,6 +9,8 @@ if errorlevel 1 (
     exit /b 1
 )
 
+for /f "delims=" %%i in ('git rev-parse HEAD') do set "BEFORE=%%i"
+
 echo Recuperation des dernieres mises a jour...
 git pull
 if errorlevel 1 (
@@ -17,8 +19,19 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo Mise a jour des dependances...
-python -m pip install -q -r requirements.txt
+for /f "delims=" %%i in ('git rev-parse HEAD') do set "AFTER=%%i"
 
+echo.
+if "%BEFORE%"=="%AFTER%" (
+    echo Deja a jour, aucune nouvelle mise a jour disponible.
+) else (
+    echo Mise a jour installee ! Changements recuperes :
+    git log --oneline %BEFORE%..%AFTER%
+    echo.
+    echo Mise a jour des dependances...
+    python -m pip install -q -r requirements.txt
+)
+
+echo.
 echo Termine !
 pause
