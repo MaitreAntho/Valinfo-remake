@@ -4,7 +4,7 @@ from src.constants import version
 
 build_exe_options = {
     "path": sys.path,
-    "include_files":['configurator.bat', 'update_valinfo.bat'],
+    "include_files":[],
     "packages": ["requests", "colr", "InquirerPy", "websockets", "pypresence", "rich", "websocket_server"],
     "excludes": ["tkinter", "test", "unittest", "pygments", "xmlrpc"]
 }

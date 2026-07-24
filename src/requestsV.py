@@ -5,11 +5,6 @@ from json.decoder import JSONDecodeError
 import requests
 from colr import color
 import os
-import shutil
-import sys
-import zipfile
-import io
-import subprocess
 from requests.exceptions import ConnectionError
 from src.i18n import t
 
@@ -38,33 +33,8 @@ class Requests:
         except (requests.RequestException, IndexError, KeyError, ValueError):
             # no releases published yet (or GitHub unreachable) - nothing to compare against
             return
-        for asset in json_data[0]["assets"]:
-            if "zip" in asset["content_type"]:
-                    link = asset["browser_download_url"]
-                    break
         if float(release_version) > float(self.version):
-            print(t("new_version_available", link=link))
-            if sys.argv[0][-3:] == "exe":
-                while True:
-                    update_now = input(t("update_now_prompt"))
-                    if update_now.lower() in ("n", "non", "no"):
-                        return
-                    elif update_now.lower() in ("o", "oui", "y", "yes", ""):
-                        self.copy_run_update_script(link)
-                        os._exit(1)
-                    else:
-                        print(t("invalid_update_input"))
-
-    def copy_run_update_script(self, link):
-        try:
-            os.mkdir(os.path.join(os.getenv('APPDATA'), "valinfo"))
-        except FileExistsError:
-            pass
-        shutil.copyfile("updatescript.bat", os.path.join(os.getenv('APPDATA'), "valinfo", "updatescript.bat"))
-        r_zip = requests.get(link, stream=True)
-        z = zipfile.ZipFile(io.BytesIO(r_zip.content))
-        z.extractall(os.path.join(os.getenv('APPDATA'), "valinfo"))
-        subprocess.Popen([os.path.join(os.getenv('APPDATA'), "valinfo", "updatescript.bat"), os.path.join(os.getenv('APPDATA'), "valinfo", ".".join(os.path.basename(link).split(".")[:-1])), os.getcwd(), os.path.join(os.getenv('APPDATA'), "valinfo")])
+            print(t("new_version_available", link="https://github.com/MaitreAntho/Valinfo-remake/releases/latest"))
 
     def check_status(self):
         try:
