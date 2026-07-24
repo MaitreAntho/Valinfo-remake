@@ -31,12 +31,16 @@ class Requests:
         self.get_headers()
 
     def check_version(self):
-        r = requests.get("https://api.github.com/repos/McDaived/Valinfo/releases")
-        json_data = r.json()
-        release_version = json_data[0]["tag_name"]  
+        try:
+            r = requests.get("https://api.github.com/repos/MaitreAntho/Valinfo-remake/releases")
+            json_data = r.json()
+            release_version = json_data[0]["tag_name"]
+        except (requests.RequestException, IndexError, KeyError, ValueError):
+            # no releases published yet (or GitHub unreachable) - nothing to compare against
+            return
         for asset in json_data[0]["assets"]:
             if "zip" in asset["content_type"]:
-                    link = asset["browser_download_url"] 
+                    link = asset["browser_download_url"]
                     break
         if float(release_version) > float(self.version):
             print(t("new_version_available", link=link))
@@ -63,8 +67,11 @@ class Requests:
         subprocess.Popen([os.path.join(os.getenv('APPDATA'), "valinfo", "updatescript.bat"), os.path.join(os.getenv('APPDATA'), "valinfo", ".".join(os.path.basename(link).split(".")[:-1])), os.getcwd(), os.path.join(os.getenv('APPDATA'), "valinfo")])
 
     def check_status(self):
-        rStatus = requests.get(
-            "https://raw.githubusercontent.com/McDaived/Valinfo/main/status.json").json()
+        try:
+            rStatus = requests.get(
+                "https://raw.githubusercontent.com/MaitreAntho/Valinfo-remake/main/status.json").json()
+        except (requests.RequestException, ValueError):
+            return
         if not rStatus["status_good"] or rStatus["print_message"]:
             status_color = (255, 0, 0) if not rStatus["status_good"] else (0, 255, 0)
             print(color(rStatus["message_to_display"], fore=status_color))
